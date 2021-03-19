@@ -5,8 +5,15 @@ import (
 	"testing"
 )
 
+//testCase contains a set of inputs and expected outputs for each test run.
+type testCase struct {
+	inputs []float64
+	output float64
+}
+
 func TestAdd(t *testing.T) {
 	t.Parallel()
+
 	var want float64 = 4
 	got := calculator.Add(2, 2)
 	if want != got {
