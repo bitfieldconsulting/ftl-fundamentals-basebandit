@@ -38,7 +38,7 @@ func TestSubtract(t *testing.T) {
 		{inputs: []float64{200, 30}, output: 170},
 		{inputs: []float64{0.56, -3.56}, output: 4.12},
 		{inputs: []float64{0.0, -0.0}, output: 0.0},
-		{inputs: []float64{0, 0}, output: 0},
+		{inputs: []float64{0, 0}, output: -1},
 	}
 
 	for _, tt := range tests {
@@ -57,7 +57,7 @@ func TestMultiply(t *testing.T) {
 		{inputs: []float64{200, 30}, output: 6000},
 		{inputs: []float64{0.56, -3.56}, output: -1.9936000000000003},
 		{inputs: []float64{0.0, -0.0}, output: -0.0},
-		{inputs: []float64{0, 0}, output: 0},
+		{inputs: []float64{0, 0}, output: 1},
 	}
 
 	for _, tt := range tests {
