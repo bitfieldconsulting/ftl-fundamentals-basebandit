@@ -141,3 +141,33 @@ func TestSqrt(t *testing.T) {
 		}
 	}
 }
+
+func TestCalcString(t *testing.T) {
+	tests := []struct {
+		input       string
+		output      float64
+		errExpected bool
+	}{
+		{input: "2*2", output: 4, errExpected: false},
+		{input: "1+1.5", output: 2.5, errExpected: false},
+		{input: "100-0.1", output: 99.9, errExpected: false},
+		{input: "99&1", errExpected: true},
+	}
+
+	for _, tt := range tests {
+		got, err := calculator.CalcString(tt.input)
+
+		if err != nil { //we got a non-nil error
+			if !tt.errExpected { //but we epected a nil error
+				t.Errorf("want nil error got %v", err)
+			}
+		} else { //we got a nil error
+			if tt.errExpected { //but we expected a non-nil error
+				t.Errorf("want non-nil error got %v", err)
+			}
+			if tt.output != got {
+				t.Errorf("want %f got %f", tt.output, got)
+			}
+		}
+	}
+}
