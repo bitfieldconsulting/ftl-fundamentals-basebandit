@@ -31,18 +31,39 @@ func TestAdd(t *testing.T) {
 
 func TestSubtract(t *testing.T) {
 	t.Parallel()
-	var want float64 = 2
-	got := calculator.Subtract(4, 2)
-	if want != got {
-		t.Errorf("want %f, got %f", want, got)
+
+	tests := []testCase{
+		{inputs: []float64{-3.0, 2.0}, output: -5.0},
+		{inputs: []float64{-0.50, -0.2}, output: -0.3},
+		{inputs: []float64{200, 30}, output: 170},
+		{inputs: []float64{0.56, -3.56}, output: 4.12},
+		{inputs: []float64{0.0, -0.0}, output: 0.0},
+		{inputs: []float64{0, 0}, output: 0},
+	}
+
+	for _, tt := range tests {
+		got := calculator.Subtract(tt.inputs[0], tt.inputs[1])
+		if tt.output != got {
+			t.Errorf("want %f, got %f", tt.output, got)
+		}
 	}
 }
 
 func TestMultiply(t *testing.T) {
 	t.Parallel()
-	var want float64 = 8
-	got := calculator.Multiply(4.5, 2)
-	if want != got {
-		t.Errorf("want %f,got %f", want, got)
+	tests := []testCase{
+		{inputs: []float64{-3.0, 2.0}, output: -6.0},
+		{inputs: []float64{-0.50, -0.2}, output: 0.1},
+		{inputs: []float64{200, 30}, output: 6000},
+		{inputs: []float64{0.56, -3.56}, output: -1.9936000000000003},
+		{inputs: []float64{0.0, -0.0}, output: -0.0},
+		{inputs: []float64{0, 0}, output: 0},
+	}
+
+	for _, tt := range tests {
+		got := calculator.Multiply(tt.inputs[0], tt.inputs[1])
+		if tt.output != got {
+			t.Errorf("want %f,got %f", tt.output, got)
+		}
 	}
 }
