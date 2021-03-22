@@ -70,3 +70,17 @@ func TestMultiply(t *testing.T) {
 		}
 	}
 }
+func TestDivide(t *testing.T) {
+	tests := []struct {
+		name        string
+		inputs      []float64
+		output      float64
+		errExpected bool
+	}{
+		{name: "One positive number and one negative number which divide to negative", inputs: []float64{1, -1}, output: -1.0, errExpected: false},
+		{name: "Two positive numbers which divide to positive", inputs: []float64{4, 2}, output: 2, errExpected: false},
+		{name: "Two positive numbers which do not divide", inputs: []float64{6, 0}, errExpected: true},
+		{name: "Two negative numbers which divide to negative", inputs: []float64{-3, -5}, output: 0.6, errExpected: false},
+	}
+
+}
