@@ -83,4 +83,16 @@ func TestDivide(t *testing.T) {
 		{name: "Two negative numbers which divide to negative", inputs: []float64{-3, -5}, output: 0.6, errExpected: false},
 	}
 
+	for _, tt := range tests {
+		got, err := calculator.Divide(tt.inputs[0], tt.inputs[1])
+		if tt.errExpected { //we expect an error
+			if err != nil { //therefore err must be non-nil(runtime error)
+				t.Errorf("%s: %v\n", tt.name, err)
+			}
+		}
+
+		if got != tt.output { //we don't expect an error but we the output might be differenc from what we expect with a non nil error.
+			t.Errorf("%s:\n\t\t\twant %f got %f", tt.name, tt.output, got)
+		}
+	}
 }
