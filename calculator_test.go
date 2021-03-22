@@ -2,7 +2,9 @@ package calculator_test
 
 import (
 	"calculator"
+	"math/rand"
 	"testing"
+	"time"
 )
 
 //testCase contains a set of inputs and expected outputs for each test run.
@@ -94,6 +96,19 @@ func TestDivide(t *testing.T) {
 
 		if got != tt.output { //we don't expect an error but we the output might be differenc from what we expect with a non nil error.
 			t.Errorf("%s:\n\t\t\twant %f got %f", tt.name, tt.output, got)
+		}
+	}
+}
+
+func TestAddRandom(t *testing.T) {
+	rand.Seed(time.Now().UnixNano())
+	for i := 0; i < 100; i++ {
+		a := rand.Float64()
+		b := rand.Float64()
+		want := a + b
+		got := calculator.Add(a, b)
+		if want != got {
+			t.Errorf("want %f got %f", want, got)
 		}
 	}
 }
