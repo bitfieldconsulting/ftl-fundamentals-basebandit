@@ -112,3 +112,31 @@ func TestAddRandom(t *testing.T) {
 		}
 	}
 }
+
+func TestSqrt(t *testing.T) {
+
+	tests := []struct {
+		name        string
+		inputs      []float64
+		output      float64
+		errExpected bool
+	}{
+		{name: "A positive number whose square root is a real number", inputs: []float64{64}, output: 8, errExpected: false},
+		{name: "A negative number whose square root is not a real number", inputs: []float64{-64}, errExpected: true},
+		{name: "A positive number whose sqaure root is a real number", inputs: []float64{0}, output: 0, errExpected: false},
+		{name: "A fractional positive number whose square root is a real number", inputs: []float64{0.64}, output: 0.8, errExpected: false},
+	}
+
+	for _, tt := range tests {
+		got, err := calculator.Sqrt(tt.inputs[0])
+		if tt.errExpected {
+			if err == nil {
+				t.Errorf("%s:\n\t\t\twant error got %v", tt.name, err)
+			}
+		}
+
+		if tt.output != got {
+			t.Errorf("%s:\n\t\t\twant %f got %f", tt.name, tt.output, got)
+		}
+	}
+}
