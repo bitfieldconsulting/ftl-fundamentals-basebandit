@@ -20,10 +20,16 @@ func Subtract(a, b, c float64) float64 {
 	return (a - b) - c
 }
 
-//Multiply takes two numbers and returns the result of multiplying the second
+//Multiply takes two or more numbers and returns the result of multiplying the second
 // by the first.
-func Multiply(a, b, c float64) float64 {
-	return (a * b) * c
+func Multiply(args ...float64) float64 {
+	var result float64 = 1
+
+	for _, arg := range args {
+		result *= arg
+	}
+
+	return result
 }
 
 //Divide takes two numbers and returns the result of dividing the second by the first.
