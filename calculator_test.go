@@ -88,14 +88,15 @@ func TestDivide(t *testing.T) {
 
 	for _, tt := range tests {
 		got, err := calculator.Divide(tt.inputs[0], tt.inputs[1], tt.inputs[2])
-		if tt.errExpected {
-			if err == nil {
-				t.Errorf("%s:\n\t\t\twant error got %v", tt.name, err)
-			}
+
+		errReceived := err != nil
+
+		if errReceived != tt.errExpected {
+			t.Fatalf("%s:\nDivide(%f,%f,%f)\t\t\tunexpected error: %v", tt.name, tt.inputs[0], tt.inputs[1], tt.inputs[2], err)
 		}
 
-		if got != tt.output { //we don't expect an error but we the output might be differenc from what we expect with a non nil error.
-			t.Errorf("%s:\n\t\t\twant %f got %f", tt.name, tt.output, got)
+		if !tt.errExpected && got != tt.output {
+			t.Errorf("%s:\nDivide(%f,%f,%f)\t\t\twant %f got %f", tt.name, tt.inputs[0], tt.inputs[1], tt.inputs[2], tt.output, got)
 		}
 	}
 }
@@ -118,56 +119,55 @@ func TestSqrt(t *testing.T) {
 
 	tests := []struct {
 		name        string
-		inputs      []float64
+		input       float64
 		output      float64
 		errExpected bool
 	}{
-		{name: "A positive number whose square root is a real number", inputs: []float64{64}, output: 8, errExpected: false},
-		{name: "A negative number whose square root is not a real number", inputs: []float64{-64}, errExpected: true},
-		{name: "A positive number whose sqaure root is a real number", inputs: []float64{0}, output: 0, errExpected: false},
-		{name: "A fractional positive number whose square root is a real number", inputs: []float64{0.64}, output: 0.8, errExpected: false},
+		{name: "A positive number whose square root is a real number", input: 64, output: 8, errExpected: false},
+		{name: "A negative number whose square root is not a real number", input: -64, errExpected: true},
+		{name: "A positive number whose sqaure root is a real number", input: 0, output: 0, errExpected: false},
+		{name: "A fractional positive number whose square root is a real number", input: 0.64, output: 0.8, errExpected: false},
 	}
 
 	for _, tt := range tests {
-		got, err := calculator.Sqrt(tt.inputs[0])
-		if tt.errExpected {
-			if err == nil {
-				t.Errorf("%s:\n\t\t\twant error got %v", tt.name, err)
-			}
+		got, err := calculator.Sqrt(tt.input)
+		errReceived := err != nil
+		if errReceived != tt.errExpected {
+
+			t.Errorf("%s:\n\t\t\tSqrt(%f)\tunexpected error %v", tt.name, tt.input, err)
 		}
 
-		if tt.output != got {
-			t.Errorf("%s:\n\t\t\twant %f got %f", tt.name, tt.output, got)
+		if !tt.errExpected && tt.output != got {
+			t.Errorf("%s:\n\t\t\tSqrt(%f)\twant %f got %f", tt.name, tt.input, tt.output, got)
 		}
 	}
 }
 
 func TestCalcString(t *testing.T) {
 	tests := []struct {
+		name        string
 		input       string
 		output      float64
 		errExpected bool
 	}{
-		{input: "2*2", output: 4, errExpected: false},
-		{input: "1+1.5", output: 2.5, errExpected: false},
-		{input: "100-0.1", output: 99.9, errExpected: false},
-		{input: "100-  0.1", output: 99.9, errExpected: false},
-		{input: "18  /  6", output: 3, errExpected: false},
-		{input: "99&1", errExpected: true},
-		{input: "7 * 1 * 3", errExpected: true},
+		{name: "Multiply N by N", input: "2*2", output: 4, errExpected: false},
+		{name: "Add a fractional number to a whole number", input: "1+1.5", output: 2.5, errExpected: false},
+		{name: "Subtract a fractional from a whole number", input: "100-0.1", output: 99.9, errExpected: false},
+		{name: "Subtract a fractional from a whole number", input: "100-  0.1", output: 99.9, errExpected: false},
+		{name: "Divide a whole number by a whole number", input: "18  /  6", output: 3, errExpected: false},
+		{name: "Bitwise AND two positive whole numbers", input: "99&1", errExpected: true},
+		{name: "Multiply three positive whole numbers", input: "7 * 1 * 3", errExpected: true},
 	}
 
 	for _, tt := range tests {
 		got, err := calculator.CalcString(tt.input)
+		errReceived := err != nil
+		if errReceived != tt.errExpected {
+			t.Fatalf("%s:\n\t\t\tCalcString(%s)\tunexpected error %v", tt.name, tt.input, err)
+		}
 
-		if err == nil && tt.errExpected { //we expected an non-nil error but got a nil error
-			t.Errorf("want non-nil error got nil error %q", err)
-		} else if (err != nil) && !tt.errExpected { //we did not expect an error but we got one anyway
-			t.Errorf("want nil error got non-nil error %q", err)
-		} else { //else our logic is wrong.
-			if tt.output != got {
-				t.Errorf("want %f got %f", tt.output, got)
-			}
+		if !tt.errExpected && tt.output != got {
+			t.Errorf("%s:\n\t\t\tCalcString(%s)\twant %f got %f", tt.name, tt.input, tt.output, got)
 		}
 	}
 }
