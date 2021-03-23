@@ -3,6 +3,7 @@ package calculator
 
 import (
 	"errors"
+	"fmt"
 	"math"
 	"strconv"
 	"strings"
@@ -42,46 +43,55 @@ func Sqrt(a float64) (float64, error) {
 }
 
 func CalcString(expr string) (float64, error) {
-
-	operators := map[string]string{"multiplication": "*", "division": "/", "addition": "+", "subtraction": "-"}
+	operators := []string{"*", "-", "+", "/"}
+	//Check if it has spaces if so we let fmt.Sscanf do the token parsing for use if not then we split and get the operands and operator ourself.
 
 	var operator string
+	var operA, operB, result float64
 
-	for k, v := range operators {
-		if strings.Contains(strings.TrimSpace(expr), v) {
-			operator = k
-			break
+	if len(strings.Fields(expr)) < 3 {
+		//probably the expr did not have spaces where we expect them to be.
+		for _, oper := range operators {
+			if strings.Contains(expr, oper) {
+				operator = oper
+				break
+			}
+		}
+
+		var err error
+
+		x := strings.TrimSpace(strings.Split(expr, operator)[0])
+
+		operA, err = strconv.ParseFloat(x, 64)
+		if err != nil {
+			return result, err
+		}
+
+		y := strings.TrimSpace(strings.Split(expr, operator)[1])
+
+		operB, err = strconv.ParseFloat(y, 64)
+		if err != nil {
+			return result, err
+		}
+	} else {
+		if _, err := fmt.Sscanf(expr, "%f%s%f", &operA, &operator, &operB); err != nil {
+			return result, err
 		}
 	}
 
-	x := strings.Split(expr, operators[operator])[0]
-	operA, err := strconv.ParseFloat(x, 64)
-
-	if err != nil {
-		panic(err)
-	}
-
-	y := strings.Split(expr, operators[operator])[1]
-	operB, err := strconv.ParseFloat(y, 64)
-
-	if err != nil {
-		panic(err)
-	}
-
-	var result float64
+	//Now lets do the math here
 
 	switch operator {
-	case "multiplication":
+	case "*":
 		result = operA * operB
-	case "division":
+	case "/":
 		result = operA / operB
-	case "subtraction":
+	case "-":
 		result = operA - operB
-	case "addition":
+	case "+":
 		result = operA + operB
-
 	default:
-		return result, errors.New("calcstring: unknown operand")
+		return result, fmt.Errorf("calcstring: unsupported operator for input expression: '%v'", expr)
 	}
 
 	return result, nil
