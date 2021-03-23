@@ -153,7 +153,7 @@ func TestCalcString(t *testing.T) {
 		{input: "100-0.1", output: 99.9, errExpected: false},
 		{input: "100-  0.1", output: 99.9, errExpected: false},
 		{input: "18  /  6", output: 3, errExpected: false},
-		{input: "99&1", errExpected: true},
+		{input: "99&1", errExpected: false},
 	}
 
 	for _, tt := range tests {
