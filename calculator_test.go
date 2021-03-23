@@ -151,20 +151,19 @@ func TestCalcString(t *testing.T) {
 		{input: "2*2", output: 4, errExpected: false},
 		{input: "1+1.5", output: 2.5, errExpected: false},
 		{input: "100-0.1", output: 99.9, errExpected: false},
+		{input: "100-  0.1", output: 99.9, errExpected: false},
+		{input: "18  /  6", output: 3, errExpected: false},
 		{input: "99&1", errExpected: true},
 	}
 
 	for _, tt := range tests {
 		got, err := calculator.CalcString(tt.input)
 
-		if err != nil { //we got a non-nil error
-			if !tt.errExpected { //but we epected a nil error
-				t.Errorf("want nil error got %v", err)
-			}
-		} else { //we got a nil error
-			if tt.errExpected { //but we expected a non-nil error
-				t.Errorf("want non-nil error got %v", err)
-			}
+		if err == nil && tt.errExpected { //we expected an non-nil error but got a nil error
+			t.Errorf("want non-nil error got nil error %q", err)
+		} else if (err != nil) && !tt.errExpected { //we did not expect an error but we got one anyway
+			t.Errorf("want nil error got non-nil error %q", err)
+		} else { //else our logic is wrong.
 			if tt.output != got {
 				t.Errorf("want %f got %f", tt.output, got)
 			}
