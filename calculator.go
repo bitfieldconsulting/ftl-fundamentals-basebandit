@@ -32,12 +32,24 @@ func Multiply(args ...float64) float64 {
 	return result
 }
 
-//Divide takes two numbers and returns the result of dividing the second by the first.
-func Divide(a, b, c float64) (float64, error) {
-	if b == 0 || c == 0 {
-		return 0.0, errors.New("divide: divide by zero")
+//Divide takes two or more numbers and returns the result of dividing the second by the first.
+func Divide(args ...float64) (float64, error) {
+	var result float64
+
+	for i, arg := range args {
+		if i > 0 && arg == 0 { //the first argument can be zero no problem but subsequent args cannot be: why? divide by zero runtime error
+			return 0, fmt.Errorf("divide: divide by zero for input %v", args[i])
+		}
+
+		if i == 0 { //for the first iteration.
+			result = arg
+			continue
+		}
+
+		result = result / arg
 	}
-	return (a / b) / c, nil
+
+	return result, nil
 }
 
 //Sqrt takes a number and returns its square root
