@@ -76,6 +76,7 @@ func Sqrt(a float64) (float64, error) {
 	return math.Sqrt(a), nil
 }
 
+//CalcString evaluates a string as a mathematical expression and yields the result otherwise returns error if encountered.
 func CalcString(expr string) (float64, error) {
 	operators := []string{"*", "-", "+", "/"}
 	//Check if it has spaces if so we let fmt.Sscanf do the token parsing for use if not then we split and get the operands and operator ourself.
@@ -83,7 +84,8 @@ func CalcString(expr string) (float64, error) {
 	var operator string
 	var operA, operB, result float64
 
-	if len(strings.Fields(expr)) < 3 {
+	fields := len(strings.Fields(expr))
+	if fields < 3 {
 		//probably the expr did not have spaces where we expect them to be.
 		for _, oper := range operators {
 			if strings.Contains(expr, oper) {
@@ -107,6 +109,8 @@ func CalcString(expr string) (float64, error) {
 		if err != nil {
 			return result, err
 		}
+	} else if fields > 3 {
+		return result, fmt.Errorf("calcstring: does not support more that two operands %q", expr)
 	} else {
 		if _, err := fmt.Sscanf(expr, "%f%s%f", &operA, &operator, &operB); err != nil {
 			return result, err
@@ -125,7 +129,7 @@ func CalcString(expr string) (float64, error) {
 	case "+":
 		result = operA + operB
 	default:
-		return result, fmt.Errorf("calcstring: unsupported operator for input expression: '%v'", expr)
+		return result, fmt.Errorf("calcstring: unsupported operator for input expression: %q", expr)
 	}
 
 	return result, nil
