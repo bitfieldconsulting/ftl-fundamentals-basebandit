@@ -2,7 +2,6 @@
 package calculator
 
 import (
-	"errors"
 	"fmt"
 	"math"
 	"strconv"
@@ -71,7 +70,7 @@ func Divide(args ...float64) (float64, error) {
 //Sqrt takes a number and returns its square root
 func Sqrt(a float64) (float64, error) {
 	if a < 0 {
-		return 0.0, errors.New("sqrt: negative numbers don't have real square roots")
+		return 0.0, fmt.Errorf("sqrt: negative number '%f'", a)
 	}
 	return math.Sqrt(a), nil
 }
