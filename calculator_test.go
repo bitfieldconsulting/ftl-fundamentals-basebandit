@@ -167,7 +167,7 @@ func TestCalcString(t *testing.T) {
 		}
 
 		if !tt.errExpected && tt.output != got {
-			t.Errorf("%s:\n\t\t\tCalcString(%s)\twant %f got %f", tt.name, tt.input, tt.output, got)
+			t.Fatalf("%s:\n\t\t\tCalcString(%s)\twant %f got %f", tt.name, tt.input, tt.output, got)
 		}
 	}
 }

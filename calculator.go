@@ -4,7 +4,6 @@ package calculator
 import (
 	"fmt"
 	"math"
-	"strconv"
 	"strings"
 )
 
@@ -39,7 +38,7 @@ func Subtract(a, b float64, args ...float64) float64 {
 	return a - b
 }
 
-//Multiply takes two or more numbers and returns the result of multiplying the second
+// Multiply takes two or more numbers and returns the result of multiplying the second
 // by the first.
 func Multiply(args ...float64) float64 {
 	var result float64 = 1
@@ -51,7 +50,7 @@ func Multiply(args ...float64) float64 {
 	return result
 }
 
-//Divide takes two or more numbers and returns the result of dividing the second by the first.
+// Divide takes two or more numbers and returns the result of dividing the second by the first.
 func Divide(args ...float64) (float64, error) {
 	var result float64
 
@@ -71,7 +70,7 @@ func Divide(args ...float64) (float64, error) {
 	return result, nil
 }
 
-//Sqrt takes a number and returns its square root
+// Sqrt takes a number and returns its square root
 func Sqrt(a float64) (float64, error) {
 	if a < 0 {
 		return 0.0, fmt.Errorf("sqrt: negative number '%f'", a)
@@ -79,47 +78,23 @@ func Sqrt(a float64) (float64, error) {
 	return math.Sqrt(a), nil
 }
 
-//CalcString evaluates a string as a mathematical expression and yields the result otherwise returns error if encountered.
+// CalcString evaluates a string as a mathematical expression and yields the result otherwise returns error if encountered. A valid expression should have spaces in between the opreands and the operator.
 func CalcString(expr string) (float64, error) {
-	operators := []string{"*", "-", "+", "/"}
-	//Check if it has spaces if so we let fmt.Sscanf do the token parsing for use if not then we split and get the operands and operator ourself.
+	//we let fmt.Sscanf do the token parsing for us if the number of fields in the epxression is 3; that is 2 operands and 1 operator.
 
 	var operator string
 	var operA, operB, result float64
 
 	fields := len(strings.Fields(expr))
-	if fields < 3 {
-		//probably the expr did not have spaces where we expect them to be.
-		for _, oper := range operators {
-			if strings.Contains(expr, oper) {
-				operator = oper
-				break
-			}
-		}
 
-		var err error
-
-		x := strings.TrimSpace(strings.Split(expr, operator)[0])
-
-		operA, err = strconv.ParseFloat(x, 64)
-		if err != nil {
-			return result, err
-		}
-
-		y := strings.TrimSpace(strings.Split(expr, operator)[1])
-
-		operB, err = strconv.ParseFloat(y, 64)
-		if err != nil {
-			return result, err
-		}
-	} else if fields > 3 {
-		return result, fmt.Errorf("calcstring: does not support more that two operands %q", expr)
-	} else {
-		if _, err := fmt.Sscanf(expr, "%f%s%f", &operA, &operator, &operB); err != nil {
-			return result, err
-		}
+	if fields > 3 {
+		return result, fmt.Errorf("calcstring: does not support more than two operands %q", expr)
 	}
 
+	if _, err := fmt.Sscanf(expr, "%f%s%f", &operA, &operator, &operB); err != nil {
+		return result, err
+	}
+	fmt.Println(operA, operator, operB)
 	//Now lets do the math here
 
 	switch operator {
