@@ -24,20 +24,19 @@ func Add(a, b float64, args ...float64) float64 {
 	return a + b
 }
 
-// Subtract takes two or more numbers and returns the result of subtracting the second
-// from the first.
-func Subtract(args ...float64) float64 {
-	var result float64
+// Subtract takes two and or possibly more numbers and returns the result of subtracting consequently from the results
+// of the first arguments.
+func Subtract(a, b float64, args ...float64) float64 {
 
-	for i, arg := range args {
-		if i == 0 {
-			result = arg
-			continue
+	if len(args) > 0 {
+		result := a - b
+		for _, arg := range args {
+			result -= arg
 		}
-		result -= arg
+		return result
 	}
 
-	return result
+	return a - b
 }
 
 //Multiply takes two or more numbers and returns the result of multiplying the second
