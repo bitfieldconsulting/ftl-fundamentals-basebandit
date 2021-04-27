@@ -150,10 +150,10 @@ func TestCalcString(t *testing.T) {
 		output      float64
 		errExpected bool
 	}{
-		{name: "Multiply N by N", input: "2*2", output: 4, errExpected: false},
-		{name: "Add a fractional number to a whole number", input: "1+1.5", output: 2.5, errExpected: false},
-		{name: "Subtract a fractional from a whole number", input: "100-0.1", output: 99.9, errExpected: false},
-		{name: "Subtract a fractional from a whole number", input: "100-  0.1", output: 99.9, errExpected: false},
+		{name: "Multiply N by N", input: "2*2", output: 4, errExpected: true},
+		{name: "Add a fractional number to a whole number", input: "1+1.5", output: 2.5, errExpected: true},
+		{name: "Subtract a fractional from a whole number", input: "100 -0.1", output: 99.9, errExpected: true},  //weird how fmt.Sscanf parses this
+		{name: "Subtract a fractional from a whole number", input: "100- 0.1", output: 99.9, errExpected: false}, //weird how fmt.Sscanf parses this
 		{name: "Divide a whole number by a whole number", input: "18  /  6", output: 3, errExpected: false},
 		{name: "Bitwise AND two positive whole numbers", input: "99&1", errExpected: true},
 		{name: "Multiply three positive whole numbers", input: "7 * 1 * 3", errExpected: true},
