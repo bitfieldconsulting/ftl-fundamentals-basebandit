@@ -8,15 +8,20 @@ import (
 	"strings"
 )
 
-// Add takes two or more numbers and returns the result of adding them together.
-func Add(args ...float64) float64 {
-	var result float64
+// Add takes atleast two or more numbers and returns the result of adding them together.
+func Add(a, b float64, args ...float64) float64 {
 
-	for _, arg := range args {
-		result += arg
+	if len(args) > 0 {
+		sum := a + b
+
+		for _, arg := range args {
+			sum += arg
+		}
+
+		return sum
 	}
 
-	return result
+	return a + b
 }
 
 // Subtract takes two or more numbers and returns the result of subtracting the second
